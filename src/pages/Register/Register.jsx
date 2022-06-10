@@ -32,7 +32,6 @@ const Register = () => {
     >
       <Center height="100vh">
         <Box
-          marginTop="50px"
           width={["90vw", "70vw", "50vw", "30vw"]}
           height="506px"
           padding="24px"
