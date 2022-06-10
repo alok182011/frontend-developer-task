@@ -82,7 +82,7 @@ const Login = () => {
               <FormControl marginTop="16px">
                 <Flex>
                   <FormLabel
-                    htmlFor="email"
+                    htmlFor="password"
                     color="#C5C7CA"
                     fontSize="14px"
                     fontWeight="500"
@@ -90,17 +90,13 @@ const Login = () => {
                     Password
                   </FormLabel>
                   <Spacer />
-                  <FormLabel
-                    htmlFor="email"
-                    color="#C5C7CA"
-                    fontSize="14px"
-                    fontWeight="500"
-                  >
+                  <FormLabel color="#C5C7CA" fontSize="14px" fontWeight="500">
                     Forgot Password
                   </FormLabel>
                 </Flex>
                 <InputGroup>
                   <Input
+                    id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     onChange={(event) => setPassword(event.currentTarget.value)}
@@ -135,14 +131,16 @@ const Login = () => {
                 <Text color="#7F8084" fontSize="14px" fontWeight="400">
                   Not registered yet?
                 </Text>
-                <Text
-                  color="#C5C7CA"
-                  fontSize="14px"
-                  fontWeight="400"
-                  marginLeft="5px"
-                >
-                  Register →
-                </Text>
+                <Link to="/register">
+                  <Text
+                    color="#C5C7CA"
+                    fontSize="14px"
+                    fontWeight="400"
+                    marginLeft="5px"
+                  >
+                    Register →
+                  </Text>
+                </Link>
               </Flex>
             </Box>
           </Box>
