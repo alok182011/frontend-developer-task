@@ -42,7 +42,7 @@ const PostThoughtForm = () => {
           borderRadius="8px"
           marginTop="16px"
         >
-          <Box width="20%">
+          <Box width={["20%", "20%", "15%", "10%"]}>
             <Center height="100%">
               <Box
                 height="48px"
@@ -50,26 +50,28 @@ const PostThoughtForm = () => {
                 borderRadius="50%"
                 backgroundColor="#27292D"
               >
-                <Center height="100%">
-                  <ChatIcon />
-                </Center>
+                <Center height="100%">{/* <ChatIcon />  */}🐼</Center>
               </Box>
             </Center>
           </Box>
-          <Box width="80%">
+          <Box width={["80%", "80%", "85%", "90%"]}>
             <Textarea
               placeholder="How are you feeling today?"
               border="none"
-              padding="16px 0px"
+              padding="10px 0px"
+              css={{
+                "&::-webkit-scrollbar": {
+                  width: "4px",
+                },
+                "&::-webkit-scrollbar-track": {
+                  width: "6px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "gray",
+                  borderRadius: "24px",
+                },
+              }}
             />
-            {/* <FormControl>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email or username"
-                onChange={(event) => setEmail(event.currentTarget.value)}
-              />
-            </FormControl> */}
           </Box>
         </Flex>
       </Box>

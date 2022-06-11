@@ -9,7 +9,7 @@ import Home from "./pages/Home/Home";
 
 function App() {
   return (
-    <Box width="100vw" height="100vh" fontFamily="Inter">
+    <Box width="100%" height="100vh" fontFamily="Inter">
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Login />} />

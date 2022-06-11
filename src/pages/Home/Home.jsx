@@ -17,18 +17,19 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import { Link } from "react-router-dom";
 import PostThoughtForm from "../../components/PostThoughtForm/PostThoughtForm";
+import ThoughtBox from "../../components/ThoughtBox/ThoughtBox";
 
 const Home = () => {
   return (
     <Box
-      height="100vh"
       backgroundColor="#131319"
       color="white"
       className="noselect"
+      width="100%"
     >
       <Center>
-        <Box width={["90vw", "80vw", "70vw", "70vw"]} border="2px solid white">
-          <Box marginTop="69px" marginBottom="40px" border="1px solid red">
+        <Box width={["90vw", "80vw", "70vw", "70vw"]}>
+          <Box marginTop="69px" marginBottom="40px">
             <Text color="#C5C7CA" fontWeight="500" fontSize="28px">
               Hello Jane
             </Text>
@@ -45,7 +46,12 @@ const Home = () => {
           <Box>
             <PostThoughtForm />
           </Box>
-          <Box>Thoughts</Box>
+          <Box>
+            <ThoughtBox />
+            <ThoughtBox />
+            <ThoughtBox />
+            <ThoughtBox />
+          </Box>
         </Box>
       </Center>
     </Box>
