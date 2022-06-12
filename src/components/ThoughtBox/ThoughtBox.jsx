@@ -15,7 +15,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 
-import { ChatIcon } from "@chakra-ui/icons";
+import { ChatIcon, DeleteIcon } from "@chakra-ui/icons";
 
 import { Link } from "react-router-dom";
 
@@ -55,15 +55,15 @@ const ThoughtBox = () => {
           <Box
             height="25px"
             width="25px"
-            borderRadius="50%"
-            backgroundColor="#000000"
             css={{
               ":hover": {
                 cursor: "pointer",
               },
             }}
           >
-            <Center height="100%">☢️</Center>
+            <Center height="100%">
+              <DeleteIcon />
+            </Center>
           </Box>
         </Flex>
         <Flex

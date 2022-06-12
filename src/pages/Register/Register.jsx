@@ -36,7 +36,6 @@ const Register = () => {
           height="506px"
           padding="24px"
           border="2px solid"
-          borderImageSource="linear-gradient(129.59deg, #969696 0%, #343434 98.18%)"
           backgroundColor="#27292D"
           borderRadius="8px"
         >

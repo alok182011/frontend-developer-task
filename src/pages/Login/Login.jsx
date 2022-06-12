@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
+  AlertDescription,
   Box,
   Button,
   Center,
@@ -13,16 +15,58 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin } from "../../redux/features/userSlice";
 
-import { Link } from "react-router-dom";
+import { ViewIcon, ViewOffIcon, SpinnerIcon } from "@chakra-ui/icons";
+
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../../modules/authModules";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+  let navigate = useNavigate();
+  const user = useSelector((state) => state.token);
+
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [errors, setErrors] = useState({
+    code: 0,
+    message: "",
+  });
 
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordVisibility = () => setShowPassword(!showPassword);
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/home");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSubmit = (e) => {
+    setLoading(true);
+
+    try {
+      login(usernameOrEmail, password, (error, user) => {
+        if (error) {
+          setErrors({ code: error.code, message: error.message });
+          setLoading(false);
+        } else if (user) {
+          dispatch(userLogin(user.data));
+          setLoading(false);
+          navigate("/home");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box
       height="100vh"
@@ -45,7 +89,6 @@ const Login = () => {
             height="420px"
             padding="24px"
             border="2px solid"
-            borderImageSource="linear-gradient(129.59deg, #969696 0%, #343434 98.18%)"
             backgroundColor="#27292D"
             borderRadius="8px"
           >
@@ -76,7 +119,9 @@ const Login = () => {
                   id="email"
                   type="email"
                   placeholder="Enter your email or username"
-                  onChange={(event) => setEmail(event.currentTarget.value)}
+                  onChange={(event) =>
+                    setUsernameOrEmail(event.currentTarget.value)
+                  }
                 />
               </FormControl>
               <FormControl marginTop="16px">
@@ -121,11 +166,39 @@ const Login = () => {
             </Box>
             <Box marginTop="20px">
               <Button width="100%" backgroundColor="#4A96FF" variant="solid">
-                <Text color="#FFFFFF" fontSize="16px" fontWeight="500">
-                  Login Now
-                </Text>
+                {loading ? (
+                  <SpinnerIcon />
+                ) : (
+                  <Text
+                    color="#FFFFFF"
+                    fontSize="16px"
+                    fontWeight="500"
+                    onClick={handleSubmit}
+                    css={{
+                      ":hover": {
+                        cursor: "pointer",
+                      },
+                    }}
+                  >
+                    Login Now
+                  </Text>
+                )}
               </Button>
             </Box>
+            {errors.code === 404 ||
+            errors.code === 401 ||
+            errors.code === 400 ? (
+              <Alert
+                height="5px"
+                marginTop="5px"
+                borderRadius="8px"
+                status="error"
+                fontSize="14px"
+                color="black"
+              >
+                <AlertDescription>{errors.message}</AlertDescription>
+              </Alert>
+            ) : null}
             <Box marginTop="12px">
               <Flex>
                 <Text color="#7F8084" fontSize="14px" fontWeight="400">
