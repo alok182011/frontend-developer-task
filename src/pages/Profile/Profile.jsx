@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Box, Center, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Spacer,
+  Text,
+} from "@chakra-ui/react";
+
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import { useSelector } from "react-redux";
 
-import "./Home.css";
+import "./Profile.css";
 
+import { Link } from "react-router-dom";
 import PostThoughtForm from "../../components/PostThoughtForm/PostThoughtForm";
 import ThoughtBox from "../../components/ThoughtBox/ThoughtBox";
 import { getAllThoughts } from "../../modules/thoughtModule";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-const Home = () => {
+const Profile = () => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [thoughts, setThoughts] = useState([]);
@@ -18,7 +33,6 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     try {
       getAllThoughts(0, 10, user.token, (error, receivedThoughts) => {
         if (error) {
@@ -82,23 +96,19 @@ const Home = () => {
             <PostThoughtForm />
           </Box>
           <Box>
-            {loading ? (
-              <h2>Loading...</h2>
-            ) : (
-              <InfiniteScroll
-                dataLength={thoughts.length}
-                hasMore={hasMore}
-                next={fetchMoreData}
-                loader={<h2>Loading...</h2>}
-                className="example"
-              >
-                <Box>
-                  {thoughts.map((thought, index) => (
-                    <ThoughtBox key={index} thought={thought} />
-                  ))}
-                </Box>
-              </InfiniteScroll>
-            )}
+            <InfiniteScroll
+              dataLength={thoughts.length}
+              hasMore={hasMore}
+              next={fetchMoreData}
+              loader={<h2>Loading...</h2>}
+              className="example"
+            >
+              <Box>
+                {thoughts.map((thought, index) => (
+                  <ThoughtBox key={index} thought={thought} />
+                ))}
+              </Box>
+            </InfiniteScroll>
           </Box>
         </Box>
       </Center>
@@ -106,4 +116,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Profile;

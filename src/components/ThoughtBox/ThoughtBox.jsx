@@ -3,28 +3,50 @@ import {
   Box,
   Button,
   Center,
-  Checkbox,
   Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightElement,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
   Spacer,
   Text,
-  Textarea,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import { ChatIcon, DeleteIcon } from "@chakra-ui/icons";
 
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import moment from "moment";
+import { deleteThought } from "../../modules/thoughtModule";
 
-const ThoughtBox = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const ThoughtBox = ({ thought }) => {
+  const user = useSelector((state) => state.user);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const handlePasswordVisibility = () => setShowPassword(!showPassword);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [thoughtId, setThoughtId] = useState(null);
+
+  const handleDeleteButtonClick = (thought_id) => {
+    setThoughtId(thought_id);
+    onOpen();
+  };
+  console.log(thought);
+  const handleThoughtDelete = () => {
+    try {
+      deleteThought(thoughtId, user.token, (error, deleteSuccess) => {
+        if (error) {
+          alert(error.message);
+        } else if (deleteSuccess) {
+          onClose();
+          alert(deleteSuccess.data);
+          window.location.reload();
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box
       padding="20px"
@@ -41,30 +63,53 @@ const ThoughtBox = () => {
             borderRadius="50%"
             backgroundColor="#000000"
           >
-            <Center height="100%">{/* <ChatIcon />  */}🐼</Center>
+            {thought.anoymous ? (
+              <Center height="100%">{/* <ChatIcon />  */}🐼</Center>
+            ) : (
+              <Link to={`/profile/${thought.username}`}>
+                <Center height="100%">{/* <ChatIcon />  */}🐼</Center>
+              </Link>
+            )}
           </Box>
-          <Box marginLeft="16px">
-            <Text color="#C5C7CA" fontSize="16px" fontWeight="500">
-              Name
-            </Text>
-            <Text color="#7F8084" fontSize="14px">
-              Time
-            </Text>
-          </Box>
+          {thought.anoymous ? (
+            <Box marginLeft="16px">
+              <Text color="#C5C7CA" fontSize="16px" fontWeight="500">
+                {thought.username ? thought.username : "Anoymous"}
+              </Text>
+              <Text color="#7F8084" fontSize="14px">
+                {moment(thought.createdAt).fromNow(true)} ago
+              </Text>
+            </Box>
+          ) : (
+            <Link to={`/profile/${thought.username}`}>
+              <Box marginLeft="16px">
+                <Text color="#C5C7CA" fontSize="16px" fontWeight="500">
+                  {thought.username ? thought.username : "Anoymous"}
+                </Text>
+                <Text color="#7F8084" fontSize="14px">
+                  {moment(thought.createdAt).fromNow(true)} ago
+                </Text>
+              </Box>
+            </Link>
+          )}
           <Spacer />
-          <Box
-            height="25px"
-            width="25px"
-            css={{
-              ":hover": {
-                cursor: "pointer",
-              },
-            }}
-          >
-            <Center height="100%">
-              <DeleteIcon />
-            </Center>
-          </Box>
+          {thought.user_id === user.id || thought.username === user.username ? (
+            <Box
+              height="25px"
+              width="25px"
+              css={{
+                ":hover": {
+                  cursor: "pointer",
+                },
+              }}
+            >
+              <Center height="100%">
+                <DeleteIcon
+                  onClick={() => handleDeleteButtonClick(thought._id)}
+                />
+              </Center>
+            </Box>
+          ) : null}
         </Flex>
         <Flex
           width="100%"
@@ -105,17 +150,7 @@ const ThoughtBox = () => {
                 },
               }}
             >
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit officia consequat duis enim velit mollit.
-              Exercitation veniam consequat sunt nostrud amet.Amet minim mollit
-              non deserunt ullamco est sit aliqua dolor do amet sint. Velit
-              officia consequat duis enim velit mollit. Exercitation veniam
-              consequat sunt nostrud amet.Amet minim mollit non deserunt ullamco
-              est sit aliqua dolor do amet sint. Velit officia consequat duis
-              enim velit mollit. Exercitation veniam consequat sunt nostrud
-              amet.Amet minim mollit non deserunt ullamco est sit aliqua dolor
-              do amet sint. Velit officia consequat duis enim velit mollit.
-              Exercitation veniam consequat sunt nostrud amet.
+              {thought.body}
             </Text>
           </Box>
         </Flex>
@@ -123,11 +158,24 @@ const ThoughtBox = () => {
       <Flex marginTop="12px">
         <Center>
           <ChatIcon />{" "}
-          <Text marginLeft="10px" color="#7F8084" fontsize="14px">
-            24 comments
+          <Text marginLeft="10px" color="#7F8084" fontSize="14px">
+            {thought.replies}
           </Text>
         </Center>
       </Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalContent padding="10px" backgroundColor="#27292D" color="white">
+          <ModalBody>Are you sure ???</ModalBody>
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="red" onClick={handleThoughtDelete}>
+              Yes
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

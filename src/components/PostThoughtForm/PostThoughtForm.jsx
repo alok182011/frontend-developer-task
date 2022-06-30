@@ -5,26 +5,40 @@ import {
   Center,
   Checkbox,
   Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightElement,
   Spacer,
   Text,
   Textarea,
 } from "@chakra-ui/react";
 
-import { ChatIcon } from "@chakra-ui/icons";
+import { useSelector } from "react-redux";
 
-import { Link } from "react-router-dom";
+import { postThought } from "../../modules/thoughtModule";
 
 const PostThoughtForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const token = useSelector((state) => state.user.token);
+  const [body, setBody] = useState("");
+  const [anoymous, setAnoymous] = useState(true);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const handlePasswordVisibility = () => setShowPassword(!showPassword);
+  const [loading, setLoading] = useState(false);
+
+  const handlePost = (e) => {
+    setLoading(true);
+
+    try {
+      postThought(body, anoymous, token, (error, post) => {
+        if (error) {
+          alert(error.message);
+          setLoading(false);
+        } else if (post) {
+          setLoading(false);
+          window.location.reload();
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box
       padding="20px"
@@ -71,18 +85,36 @@ const PostThoughtForm = () => {
                   borderRadius: "24px",
                 },
               }}
+              onChange={(event) => setBody(event.currentTarget.value)}
             />
           </Box>
         </Flex>
       </Box>
       <Flex marginTop="20px" flexDirection="row-reverse">
-        <Button backgroundColor="#4A96FF" variant="solid">
-          <Text color="#FFFFFF" fontSize="16px" fontWeight="500">
+        <Button
+          isLoading={loading}
+          isDisabled={!body.length}
+          backgroundColor="#4A96FF"
+          variant="solid"
+          onClick={handlePost}
+        >
+          <Text
+            color="#FFFFFF"
+            fontSize="16px"
+            fontWeight="500"
+            css={{
+              ":hover": {
+                cursor: "pointer",
+              },
+            }}
+          >
             Post
           </Text>
         </Button>
         <Spacer />
-        <Checkbox defaultChecked>Post Anoymously</Checkbox>
+        <Checkbox defaultChecked onChange={(event) => setAnoymous(!anoymous)}>
+          Post Anoymously
+        </Checkbox>
       </Flex>
     </Box>
   );

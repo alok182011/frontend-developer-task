@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
+  AlertDescription,
   Box,
   Button,
   Center,
@@ -15,14 +17,58 @@ import {
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Link, useNavigate } from "react-router-dom";
+
+import { register } from "../../modules/authModule";
+import { userLogin } from "../../redux/features/userSlice";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  let navigate = useNavigate();
+  const user = useSelector((state) => state.token);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+
+  const [errors, setErrors] = useState({
+    code: 0,
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordVisibility = () => setShowPassword(!showPassword);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/home");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleRegister = (e) => {
+    setLoading(true);
+
+    try {
+      register(username, email, password, (error, user) => {
+        if (error) {
+          setErrors({ code: error.code, message: error.message });
+          setLoading(false);
+        } else if (user) {
+          dispatch(userLogin(user.data));
+          setLoading(false);
+          navigate("/home");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box
       height="100vh"
@@ -82,7 +128,7 @@ const Register = () => {
                 id="username"
                 type="text"
                 placeholder="Choose a preferred username"
-                onChange={(event) => setEmail(event.currentTarget.value)}
+                onChange={(event) => setUsername(event.currentTarget.value)}
               />
             </FormControl>
             <FormControl marginTop="16px">
@@ -126,12 +172,39 @@ const Register = () => {
             </FormControl>
           </Box>
           <Box marginTop="20px">
-            <Button width="100%" backgroundColor="#4A96FF" variant="solid">
-              <Text color="#FFFFFF" fontSize="16px" fontWeight="500">
+            <Button
+              width="100%"
+              isLoading={loading}
+              backgroundColor="#4A96FF"
+              variant="solid"
+              onClick={handleRegister}
+            >
+              <Text
+                color="#FFFFFF"
+                fontSize="16px"
+                fontWeight="500"
+                css={{
+                  ":hover": {
+                    cursor: "pointer",
+                  },
+                }}
+              >
                 Continue
               </Text>
             </Button>
           </Box>
+          {errors.code === 404 || errors.code === 409 || errors.code === 400 ? (
+            <Alert
+              height="5px"
+              marginTop="5px"
+              borderRadius="8px"
+              status="error"
+              fontSize="14px"
+              color="black"
+            >
+              <AlertDescription>{errors.message}</AlertDescription>
+            </Alert>
+          ) : null}
           <Box marginTop="12px">
             <Flex>
               <Text color="#7F8084" fontSize="14px" fontWeight="400">

@@ -18,10 +18,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../../redux/features/userSlice";
 
-import { ViewIcon, ViewOffIcon, SpinnerIcon } from "@chakra-ui/icons";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../modules/authModules";
+import { login } from "../../modules/authModule";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -165,24 +165,25 @@ const Login = () => {
               </FormControl>
             </Box>
             <Box marginTop="20px">
-              <Button width="100%" backgroundColor="#4A96FF" variant="solid">
-                {loading ? (
-                  <SpinnerIcon />
-                ) : (
-                  <Text
-                    color="#FFFFFF"
-                    fontSize="16px"
-                    fontWeight="500"
-                    onClick={handleSubmit}
-                    css={{
-                      ":hover": {
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    Login Now
-                  </Text>
-                )}
+              <Button
+                width="100%"
+                isLoading={loading}
+                backgroundColor="#4A96FF"
+                variant="solid"
+                onClick={handleSubmit}
+              >
+                <Text
+                  color="#FFFFFF"
+                  fontSize="16px"
+                  fontWeight="500"
+                  css={{
+                    ":hover": {
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  Login Now
+                </Text>
               </Button>
             </Box>
             {errors.code === 404 ||
