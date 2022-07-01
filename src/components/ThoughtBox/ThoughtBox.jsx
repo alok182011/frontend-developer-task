@@ -30,7 +30,7 @@ const ThoughtBox = ({ thought }) => {
     setThoughtId(thought_id);
     onOpen();
   };
-  console.log(thought);
+
   const handleThoughtDelete = () => {
     try {
       deleteThought(thoughtId, user.token, (error, deleteSuccess) => {
