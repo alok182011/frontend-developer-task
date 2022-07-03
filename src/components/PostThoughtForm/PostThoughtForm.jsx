@@ -10,12 +10,15 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { postThought } from "../../modules/thoughtModule";
+import { logout } from "../../redux/features/userSlice";
 
 const PostThoughtForm = () => {
   const token = useSelector((state) => state.user.token);
+  const dispatch = useDispatch();
+
   const [body, setBody] = useState("");
   const [anoymous, setAnoymous] = useState(true);
 
@@ -47,9 +50,27 @@ const PostThoughtForm = () => {
       borderRadius="8px"
     >
       <Box>
-        <Text color="#C5C7CA" fontSize="18px" fontWeight="500">
-          Create Post
-        </Text>
+        <Flex>
+          <Text color="#C5C7CA" fontSize="18px" fontWeight="500">
+            Create Post
+          </Text>
+          <Spacer />
+          <Text
+            color="#C5C7CA"
+            fontSize="14px"
+            fontWeight="500"
+            onClick={() => {
+              dispatch(logout());
+            }}
+            css={{
+              ":hover": {
+                cursor: "pointer",
+              },
+            }}
+          >
+            Log Out
+          </Text>
+        </Flex>
         <Flex
           width="100%"
           backgroundColor="#191920"

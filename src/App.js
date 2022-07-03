@@ -7,6 +7,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   return (
@@ -15,8 +16,24 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
-          <Route exact path="/home" element={<Home />} />
-          <Route exact path="/profile/:username" element={<Profile />} />
+          <Route
+            exact
+            path="/home"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path="/profile/:username"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </Box>
