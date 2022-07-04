@@ -8,6 +8,7 @@ import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import PrivateRoute from "./PrivateRoute";
+import Thought from "./pages/Thought/Thought";
 
 function App() {
   return (
@@ -31,6 +32,15 @@ function App() {
             element={
               <PrivateRoute>
                 <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path="/thought/:thought_id"
+            element={
+              <PrivateRoute>
+                <Thought />
               </PrivateRoute>
             }
           />

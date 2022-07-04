@@ -111,57 +111,61 @@ const ThoughtBox = ({ thought }) => {
             </Box>
           ) : null}
         </Flex>
-        <Flex
-          width="100%"
-          backgroundColor="#191920"
-          borderRadius="8px"
-          marginTop="16px"
-        >
-          <Box width={["20%", "20%", "15%", "10%"]}>
-            <Center height="100%">
-              <Box
-                height="48px"
-                width="48px"
-                borderRadius="50%"
-                backgroundColor="#27292D"
+        <Link to={`/thought/${thought._id}`}>
+          <Flex
+            width="100%"
+            backgroundColor="#191920"
+            borderRadius="8px"
+            marginTop="16px"
+          >
+            <Box width={["20%", "20%", "15%", "10%"]}>
+              <Center height="100%">
+                <Box
+                  height="48px"
+                  width="48px"
+                  borderRadius="50%"
+                  backgroundColor="#27292D"
+                >
+                  <Center height="100%">🙂</Center>
+                </Box>
+              </Center>
+            </Box>
+            <Box width={["80%", "80%", "85%", "90%"]}>
+              <Text
+                color="#7F8084"
+                fontSize="16px"
+                fontWeight="400"
+                padding="10px 0px"
+                overflow="auto"
+                height="80px"
+                css={{
+                  "&::-webkit-scrollbar": {
+                    width: "4px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    width: "6px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: "gray",
+                    borderRadius: "24px",
+                  },
+                }}
               >
-                <Center height="100%">🙂</Center>
-              </Box>
-            </Center>
-          </Box>
-          <Box width={["80%", "80%", "85%", "90%"]}>
-            <Text
-              color="#7F8084"
-              fontSize="16px"
-              fontWeight="400"
-              padding="10px 0px"
-              overflow="auto"
-              height="80px"
-              css={{
-                "&::-webkit-scrollbar": {
-                  width: "4px",
-                },
-                "&::-webkit-scrollbar-track": {
-                  width: "6px",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  background: "gray",
-                  borderRadius: "24px",
-                },
-              }}
-            >
-              {thought.body}
-            </Text>
-          </Box>
-        </Flex>
+                {thought.body}
+              </Text>
+            </Box>
+          </Flex>
+        </Link>
       </Box>
       <Flex marginTop="12px">
-        <Center>
-          <ChatIcon />{" "}
-          <Text marginLeft="10px" color="#7F8084" fontSize="14px">
-            {thought.replies}
-          </Text>
-        </Center>
+        <Link to={`/thought/${thought._id}`}>
+          <Center>
+            <ChatIcon />{" "}
+            <Text marginLeft="10px" color="#7F8084" fontSize="14px">
+              {thought.replies}
+            </Text>
+          </Center>
+        </Link>
       </Flex>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalContent padding="10px" backgroundColor="#27292D" color="white">

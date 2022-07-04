@@ -54,6 +54,9 @@ const Profile = () => {
               alert(error.message);
               setLoading(false);
             } else if (receivedThoughts) {
+              if (receivedThoughts.data.length < 10) {
+                setHasMore(false);
+              }
               setThoughts(receivedThoughts.data);
             }
           }
